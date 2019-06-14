@@ -256,6 +256,17 @@ class RestGSB extends Rest
                     }
                 }
                 break;
+            case  'donmedicaments';
+                if (isset($args['id'])) {
+                    $this->response("", 400); // Bad Request
+                } else {  // Seules la méthode GET est autorisée
+                    if ($this->method == 'GET') {
+                        $this->request['fonction'] = "getDonsMedicaments";
+                    } else {
+                        $this->response("", 400); // Bad Request
+                    }
+                }
+                break;
             case  'nouveaurapport':
                 if (isset($args['id'])) {  // l'id de la ressource ne DOIT être renseigné
                     $this->response("", 400); // Bad Request
@@ -366,6 +377,12 @@ class RestGSB extends Rest
     {
         $nom = $args['nom'];
         $lesLignes = $this->pdo->getLesMedicaments($nom);
+        $this->data = $this->encoderReponse($lesLignes);
+    }
+
+    private function getDonsMedicaments()
+    {
+        $lesLignes = $this->pdo->getDonsMedicaments();
         $this->data = $this->encoderReponse($lesLignes);
     }
 

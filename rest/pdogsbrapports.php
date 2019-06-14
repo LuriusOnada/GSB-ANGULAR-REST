@@ -58,7 +58,7 @@ class PdoGsbRapports
 
     /**
      * Retourne les informations du visiteur
-     * @param $login 
+     * @param $login
      * @param $mdp
      * @return le tableau associatif ou NULL
      */
@@ -162,6 +162,14 @@ class PdoGsbRapports
         $req = "select * from medicament where nomCommercial like '" . $nom . "%' order by nomCommercial";
         $rs = self::$monPdo->query($req);
         $lesLignes = $rs->fetchAll();
+        return $lesLignes;
+    }
+    public function getDonsMedicaments()
+    {
+        $req = "SELECT m.nomCommercial, COUNT(*) as nombreDon FROM medicament m, offrir WHERE offrir.idMedicament = m.id GROUP BY m.id";
+        $stm = self::$monPdo->prepare($req);
+        $stm->execute();
+        $lesLignes = $stm->fetchall();
         return $lesLignes;
     }
 
